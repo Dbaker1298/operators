@@ -1,0 +1,19 @@
+# v3/deployment.yml:0.0.4
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafzahl-operator
+  namespace: grafzahl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafzahl
+  template:
+    metadata:
+      labels:
+        app: grafzahl
+    spec:
+      containers:
+      - name: main
+        image: docker.io/dbaker1298/grafzahl:0.0.1

@@ -1,0 +1,8 @@
+# v3/numbers-example.yml:v0.0.3
+apiVersion: "grafzahl.io/v1beta1"
+kind: GrafzahlNumber
+metadata:
+  name: total
+spec:
+  pods: 2
+  deployments: 3

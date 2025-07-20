@@ -1,0 +1,38 @@
+# v3/crd.yml:v0.0.3
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: numbers.grafzahl.io
+spec:
+  group: grafzahl.io
+  scope: Cluster
+  names:
+    plural: numbers
+    singular: number
+    kind: GrafzahlNumber
+    shortNames:
+    - gn
+  versions:
+  - name: v1beta1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              deployments:
+                type: integer
+              pods:
+                type: integer
+    additionalPrinterColumns:
+    - name: Deployments
+      type: integer
+      description: Total number of deployments
+      jsonPath: .spec.deployments
+    - name: Pods
+      type: integer
+      jsonPath: .spec.pods
+
