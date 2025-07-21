@@ -1,11 +1,16 @@
-VERSION ?= $(shell git describe --always 2>/dev/null || echo "0.0.1")
-REGISTRY ?= docker.io
-ORG ?= dbaker1298
-PROJ ?= grafzahl
-IMG := $(REGISTRY)/$(ORG)/$(PROJ):$(VERSION)
+DATE = $(shell date +%Y%m%d%H%M)
+VERSION = v$(DATE)
+GOOS ?= $(shell go env | grep GOOS | cut -d'"' -f2)
+BINARY := grafzahl
 
-docker-build:
-	docker build -t $(IMG) .
+LDFLAGS := -X github.com/Dbaker1298/grafzahl/pkg/operator.VERSION=$(VERSION)
+GOFLAGS := -ldflags "$(LDFLAGS)"
+PACKAGES := $(shell find $(SRCDIRS) -type d)
+GOFILES := $(addsuffix /*.go,$(PACKAGES))
+GOFILES := $(wildcard $(GOFILES))
 
-docker-push:
-	docker push $(IMG)
+.PHONY: all clean
+
+all: bin/$(GOOS)/$(BINARY)
+bin/%/$(BINARY): $(GOFILES) Makefile
+	GOARCH=amd64 go build $(GOFLAGS) -v -o $(BINARY) cmd/main.go
